@@ -4,9 +4,7 @@ from firebase_admin import credentials, firestore
 
 # Initialize Firebase only once
 if not firebase_admin._apps:
-    firebase_key_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
-    cred = credentials.Certificate(firebase_key_path)
-    firebase_admin.initialize_app(cred)
+    firebase_admin.initialize_app()
 
 db = firestore.client()
 
