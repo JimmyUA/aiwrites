@@ -14,7 +14,7 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 # === INIT GEMINI ===
 genai.configure(api_key=GOOGLE_API_KEY)
-model = genai.GenerativeModel("gemini-pro")
+model = genai.GenerativeModel("gemini-2.5-pro")
 
 # === FASTAPI APP ===
 app = FastAPI()
