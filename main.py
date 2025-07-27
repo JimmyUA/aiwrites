@@ -55,11 +55,23 @@ def select_most_exciting_news(entries):
         return entries[0]  # fallback if something goes wrong
 
 # === SUMMARIZE SELECTED ===
-def summarize_in_ukrainian(title: str) -> str:
+def summarize_in_ukrainian_full_post(title: str, link: str, published: str) -> str:
     prompt = f"""
-Заголовок новини: "{title}"
+Склади повністю готовий пост для Telegram-каналу українською мовою на основі новини про штучний інтелект.
 
-Напиши стислий, емоційний анонс цією новини українською мовою. Стиль — як для Telegram-каналу. 2-3 речення.
+Використай наступну інформацію:
+- Заголовок: {title}
+- Посилання: {link}
+- Час публікації: {published}
+
+Пост має бути емоційним, стислим і цікавим. Форматуй його так:
+
+🧠 <b>Заголовок</b>  
+📌 Короткий анонс (2–3 речення, з емодзі, без форматування всередині)  
+📎 <a href="...">Читати більше</a>  
+🕒 <час публікації>
+
+Відповідай лише самим повідомленням у цьому форматі, нічого більше не додавай.
 """
     response = model.generate_content(prompt)
     return response.text.strip()
@@ -71,15 +83,11 @@ def get_top_ai_news_message():
         return None
 
     selected = select_most_exciting_news(entries)
-    summary = summarize_in_ukrainian(selected.title)
-
-    return f"""🧠 <b>{selected.title}</b>
-
-📌 {summary}
-
-📎 <a href="{selected.link}">Читати більше</a>
-🕒 {selected.published}
-"""
+    return summarize_in_ukrainian_full_post(
+        selected.title,
+        selected.link,
+        selected.published
+    )
 
 # === ENDPOINT ===
 @app.get("/trigger")
