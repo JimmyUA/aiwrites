@@ -7,7 +7,7 @@ import google.generativeai as genai
 # === CONFIGURATION ===
 import os
 
-from firebase import mark_as_posted, has_been_posted
+from firebase_utils import mark_as_posted, has_been_posted
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHANNEL = "@aiwrites"
