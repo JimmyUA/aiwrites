@@ -82,7 +82,7 @@ def get_top_ai_news_message():
 """
 
 # === ENDPOINT ===
-@app.post("/trigger")
+@app.get("/trigger")
 async def trigger_news_post(request: Request):
     message = get_top_ai_news_message()
     if message:
