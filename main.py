@@ -7,6 +7,8 @@ import google.generativeai as genai
 # === CONFIGURATION ===
 import os
 
+from firebase import mark_as_posted, has_been_posted
+
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHANNEL = "@aiwrites"
 GOOGLE_NEWS_RSS = "https://news.google.com/rss/search?q=artificial+intelligence&hl=en-US&gl=US&ceid=US:en"
@@ -82,12 +84,16 @@ def get_top_ai_news_message():
     if not entries:
         return None
 
-    selected = select_most_exciting_news(entries)
-    return summarize_in_ukrainian_full_post(
-        selected.title,
-        selected.link,
-        selected.published
-    )
+    fresh_entries = [e for e in entries if not has_been_posted(e.link)]
+    if not fresh_entries:
+        print("😴 No fresh entries found.")
+        return None
+
+    selected = select_most_exciting_news(fresh_entries)
+    message = summarize_in_ukrainian_full_post(selected.title, selected.link, selected.published)
+
+    mark_as_posted(selected.link)
+    return message
 
 # === ENDPOINT ===
 @app.get("/trigger")
